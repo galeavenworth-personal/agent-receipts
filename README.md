@@ -34,8 +34,11 @@ rcpt run ls -la /tmp
 # Custom output path
 rcpt run --out my-receipt.json cargo build
 
-# Complex shell command
+# Complex shell command (Unix-like systems)
 rcpt run sh -c 'echo "stdout"; echo "stderr" >&2; exit 42'
+
+# Complex shell command (Windows PowerShell)
+rcpt run powershell -Command "Write-Output 'stdout'; Write-Error 'stderr'; exit 42"
 ```
 
 ## Receipt Format
@@ -68,12 +71,12 @@ The receipt is a JSON file containing:
 
 ## Features
 
-- ✅ Simple, portable, deterministic
+- ✅ Simple and portable
 - ✅ Exit code propagation (rcpt exits with same code as wrapped command)
 - ✅ Complete stdout/stderr capture
 - ✅ Precise timing with millisecond resolution
 - ✅ ISO 8601 timestamps
-- ✅ Pretty-printed JSON output
+- ✅ Deterministic JSON schema with consistent field ordering
 
 ## License
 
