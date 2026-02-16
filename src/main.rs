@@ -3,7 +3,7 @@ use clap::{Parser, Subcommand};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::Instant;
 
@@ -99,7 +99,7 @@ fn execute_command(command_parts: Vec<String>) -> Result<Receipt> {
     Ok(receipt)
 }
 
-fn write_receipt(path: &PathBuf, receipt: &Receipt) -> Result<()> {
+fn write_receipt(path: &Path, receipt: &Receipt) -> Result<()> {
     let json = serde_json::to_string_pretty(receipt)
         .context("Failed to serialize receipt to JSON")?;
     
