@@ -62,8 +62,8 @@ fn main() -> Result<()> {
             println!("Receipt written to: {}", out.display());
             
             // Exit with the same code as the wrapped command
-            // Use 1 as default if exit code is not available (signal termination)
-            std::process::exit(receipt.exit_code.unwrap_or(1));
+            // Use 128 as fallback for abnormal termination (e.g., signal termination without exit code)
+            std::process::exit(receipt.exit_code.unwrap_or(128));
         }
     }
 }
@@ -105,14 +105,12 @@ fn write_receipt(path: &Path, receipt: &Receipt) -> Result<()> {
     let json = serde_json::to_string_pretty(receipt)
         .context("Failed to serialize receipt to JSON")?;
     
-    // Ensure the parent directory exists, if a parent is specified
+    // Ensure the parent directory exists
     if let Some(parent) = path.parent() {
-        if !parent.as_os_str().is_empty() {
-            fs::create_dir_all(parent).context(format!(
-                "Failed to create parent directories for {}",
-                path.display()
-            ))?;
-        }
+        fs::create_dir_all(parent).context(format!(
+            "Failed to create parent directories for {}",
+            path.display()
+        ))?;
     }
 
     fs::write(path, json)
